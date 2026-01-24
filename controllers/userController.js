@@ -61,6 +61,7 @@ export function loginUser(req,res){
                 const isPasswordCorrect=bcrypt.compareSync(password,user.password)
                 if(isPasswordCorrect){
                     const token=jwt.sign({
+                        _id: user._id,
                         email:user.email,
                         firstName:user.firstName,
                         lastName:user.lastName,
