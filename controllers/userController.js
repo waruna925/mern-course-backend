@@ -68,7 +68,7 @@ export function loginUser(req,res){
                         role:user.role,
                         img:user.img
                     },
-                    "cbc-batch-five#@2025"
+                    process.env.JWT_SECRET
                 )
 
                     res.json({
