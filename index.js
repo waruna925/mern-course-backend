@@ -7,6 +7,8 @@ import orderRouter from './routes/orderRouter.js';
 import jwt from 'jsonwebtoken'
 import reviewRouter from './routes/reviewRouter.js';
 import cors from 'cors';
+import dotenv from 'dotenv';
+dotenv.config();
 
 
 const app=express();
@@ -40,7 +42,7 @@ app.use((req,res,next)=>{
     
 })
 //mongodb+srv://admin:123@cluster0.ciup1j1.mongodb.net/?appName=Cluster0
-mongoose.connect("mongodb+srv://admin:123@cluster0.ciup1j1.mongodb.net/?appName=Cluster0").then(()=>{
+mongoose.connect(process.env.MONGODB_URL).then(()=>{
     console.log("Connected to the database")
 })
 .catch(()=>{
