@@ -27,8 +27,7 @@ export function createUser(req,res){
         firstName:req.body.firstName,
         lastName:req.body.lastName,
         email:req.body.email,
-        password:hashedPassword,
-        role:req.body.role
+        password:hashedPassword
 
     })
     
@@ -73,7 +72,8 @@ export function loginUser(req,res){
 
                     res.json({
                         message:"Login Successful",
-                        token:token
+                        token:token,
+                        role:user.role
                     })
                 }
                 else{
