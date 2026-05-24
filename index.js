@@ -6,18 +6,23 @@ import userRouter from './routes/userRouter.js';
 import orderRouter from './routes/orderRouter.js';
 import jwt from 'jsonwebtoken'
 import reviewRouter from './routes/reviewRouter.js';
+import cors from 'cors';
+import dotenv from 'dotenv';
+dotenv.config();
 
 
 const app=express();
 
+app.use(cors());
 app.use(bodyParser.json())
+
 
 app.use((req,res,next)=>{
     const tokenString=req.header("Authorization")
     if(tokenString!=null){
         const token=tokenString.replace("Bearer ","")
 
-        jwt.verify(token,"cbc-batch-five#@2025",(err,decoded)=>{
+        jwt.verify(token,process.env.JWT_SECRET,(err,decoded)=>{
             if(decoded != null){
                 console.log(decoded)
                 req.user=decoded
@@ -37,7 +42,7 @@ app.use((req,res,next)=>{
     
 })
 //mongodb+srv://admin:123@cluster0.ciup1j1.mongodb.net/?appName=Cluster0
-mongoose.connect("mongodb+srv://admin:123@cluster0.ciup1j1.mongodb.net/?appName=Cluster0").then(()=>{
+mongoose.connect(process.env.MONGODB_URL).then(()=>{
     console.log("Connected to the database")
 })
 .catch(()=>{
@@ -45,10 +50,10 @@ mongoose.connect("mongodb+srv://admin:123@cluster0.ciup1j1.mongodb.net/?appName=
 })
 
 
-app.use("/products",productRouter)
-app.use("/users",userRouter)
-app.use("/orders",orderRouter)
-app.use("/reviews",reviewRouter)
+app.use("/api/products",productRouter)
+app.use("/api/users",userRouter)
+app.use("/api/orders",orderRouter)
+app.use("/api/reviews",reviewRouter)
  
 app.listen(5000,()=>{
     console.log("Server is running on port 5000");
