@@ -90,15 +90,16 @@ export async function createOrder(req, res) {
 }
 
 export async function getAllOrders(req,res){
-    if(!isAdmin(req)){
-        res.status(403).json({
-            message:"You are not an admin"
-        })
-        return
-    }
 
+  if(!req.user){
+    res.status(403).json({
+        message:"Please log in and try again"
+    })
+    return
+  }
     try{
-        const orders =await Order.find();
+      if(isAdmin(req)){
+       const orders =await Order.find();
         if(orders.length==0){
             res.status(404).json(
                 {
@@ -108,6 +109,20 @@ export async function getAllOrders(req,res){
             return
         }
         res.json(orders);
+      }
+      else{
+        const orders=await Order.find({email:req.user.email});
+        if(orders.length==0){
+            res.status(404).json(
+                {
+                    error:"Orders not found"
+                }
+            )
+            return
+        }
+        res.json(orders);
+      } 
+      
     }
     catch(e){
         res.status(500).json(
