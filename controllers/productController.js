@@ -152,42 +152,81 @@ export async function getProductById(req,res) {
     }
 }
 
-export const searchProducts = async (req, res) => {
-  try {
-    const q = req.query.q;
+// export const searchProducts = async (req, res) => {
+//   try {
+//     const q = req.query.q;
 
-    if (!q) {
-      return res.json({
-        success: false,
-        message: "Search query is required",
-      });
+//     if (!q) {
+//       return res.json({
+//         success: false,
+//         message: "Search query is required",
+//       });
+//     }
+
+//     // 👉 ADD YOUR CODE HERE
+//     const keywords = q.toLowerCase().trim().split(" ");
+
+//     const query = {
+//       $and: keywords.map(word => ({
+//         $or: [
+//           { name: { $regex: word, $options: "i" } },
+//           { description: { $regex: word, $options: "i" } },
+//           { brand: { $regex: word, $options: "i" } }
+//         ]
+//       }))
+//     };
+
+//     const products = await Product.find(query);
+
+//     res.json({
+//       success: true,
+//       count: products.length,
+//       products,
+//     });
+
+//   } catch (error) {
+//     res.json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
+export async function searchProduct(req, res) {
+    const searchQuery = req.query.query || "";
+
+    try {
+        const products = await Product.find({
+            $or: [
+                {
+                    name: {
+                        $regex: searchQuery,
+                        $options: "i",
+                    },
+                },
+                {
+                    altNames: {
+                        $elemMatch: {
+                            $regex: searchQuery,
+                            $options: "i",
+                        },
+                    },
+                },
+                {
+                    description: {
+                        $regex: searchQuery,
+                        $options: "i",
+                    },
+                },
+            ],
+            isAvailable: true,
+        });
+
+        res.json(products);
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
     }
-
-    // 👉 ADD YOUR CODE HERE
-    const keywords = q.toLowerCase().trim().split(" ");
-
-    const query = {
-      $and: keywords.map(word => ({
-        $or: [
-          { name: { $regex: word, $options: "i" } },
-          { description: { $regex: word, $options: "i" } },
-          { brand: { $regex: word, $options: "i" } }
-        ]
-      }))
-    };
-
-    const products = await Product.find(query);
-
-    res.json({
-      success: true,
-      count: products.length,
-      products,
-    });
-
-  } catch (error) {
-    res.json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
+}
