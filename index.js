@@ -6,6 +6,7 @@ import userRouter from './routes/userRouter.js';
 import orderRouter from './routes/orderRouter.js';
 import jwt from 'jsonwebtoken'
 import reviewRouter from './routes/reviewRouter.js';
+import aiRouter from './routes/aiRouter.js';
 import cors from 'cors';
 import dotenv from 'dotenv';
 dotenv.config();
@@ -41,7 +42,7 @@ app.use((req,res,next)=>{
     }
     
 })
-//mongodb+srv://admin:123@cluster0.ciup1j1.mongodb.net/?appName=Cluster0
+
 mongoose.connect(process.env.MONGODB_URL).then(()=>{
     console.log("Connected to the database")
 })
@@ -54,6 +55,7 @@ app.use("/api/products",productRouter)
 app.use("/api/users",userRouter)
 app.use("/api/orders",orderRouter)
 app.use("/api/reviews",reviewRouter)
+app.use("/api/ai", aiRouter);
  
 app.listen(5000,()=>{
     console.log("Server is running on port 5000");
