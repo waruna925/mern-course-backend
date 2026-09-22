@@ -42,7 +42,7 @@ app.use((req,res,next)=>{
     }
     
 })
-//mongodb+srv://admin:123@cluster0.ciup1j1.mongodb.net/?appName=Cluster0
+
 mongoose.connect(process.env.MONGODB_URL).then(()=>{
     console.log("Connected to the database")
 })

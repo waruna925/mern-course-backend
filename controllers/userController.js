@@ -9,9 +9,9 @@ dotenv.config();
 
 export function createUser(req,res){
 
-    if(req.body.role=="admin"){ //admin aaganum nu request anupuraar
+    if(req.body.role=="admin"){ 
         if(req.user!=null){
-            if(req.user.role!="admin"){ //admin oralkku thaa innoru aalai admin aakka elum
+            if(req.user.role!="admin"){ 
                 res.status(403).json({
                     message:"You are not authorized to create an admin account"
                 })
